@@ -21,21 +21,23 @@ class AdminSignup extends Component {
     }
 
     handleAuthFetchSignUp = (info) => {
-        fetch("http://localhost:3000/admin/employees", {method: "POST", headers: {'Content-Type': 'application/json'}, 
-        body: JSON.stringify({email: info.email, password: info.password, name: info.name, username: info.username, title: info.title, role: info.role})})
-        .then(resp => resp.json()).then(data => {
-            if(data.error){
-                this.setState({emailError: data.error.email, nameError: data.error.name, usernameError: data.error.username, passwordError: data.error.password, roleError: data.error.role}, () => 
-                {if(this.state.confirmPass !== this.state.password){
-                    this.setState({passwordError: this.state.passwordError ? [...this.state.passwordError, "password does not match"] : ["password does not match"]})
-                }})
-            }else {
-                this.props.setUser(data.employee)
-                localStorage.setItem('jwt', data.jwt)
-                this.props.history.push("/admin/home");
-            }
-        })
-      }
+        if (this.state.confirmPass !== this.state.password) {
+            this.setState({passwordError: ["password does not match"]})
+            return
+        } else {
+            fetch("http://localhost:3000/admin/employees", {method: "POST", headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify({email: info.email, password: info.password, name: info.name, username: info.username, title: info.title, role: info.role})})
+            .then(resp => resp.json()).then(data => {
+                if(data.error) {
+                    this.setState({emailError: data.error.email, nameError: data.error.name, usernameError: data.error.username, passwordError: data.error.password, roleError: data.error.role}) 
+                } else {
+                    this.props.setUser(data.employee)
+                    localStorage.setItem('jwt', data.jwt)
+                    this.props.history.push("/admin/home");
+                }
+            })    
+        }
+    }
 
 
     handleChange = e => {

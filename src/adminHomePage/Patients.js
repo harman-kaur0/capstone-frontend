@@ -1,24 +1,63 @@
 import {Button, Modal, Form, Col, Row} from 'react-bootstrap';
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
+import PatientsList from "./patientsPage/PatientsList"
+
 
 const Patients = () => {
 
     const [show, setShow] = useState(false);
+    const [patients, setPatients] = useState([]);
 
     const [form, setForm] = useState({name:"", date_of_birth:"", address:"", phone_number:"", ethicity:"", race:"", email:"", language:""})
 
     const handleChange = (e) => {
         setForm({...form, [e.target.name]: e.target.value})
     }
+    
+    const fetchPatients = () => {
+        fetch('http://localhost:3000/patients', {
+            method: "GET",
+            headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("jwt")}`,
+            },
+        })
+            .then((res) => res.json())
+            .then(data => {
+                setPatients(data)
+            })
+    }
 
-    const handleSubmit = () => {
-        setShow(false)
+    const postPatients = (obj) => {
+        fetch('http://localhost:3000/patients', {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("jwt")}`,
+            },
+            body: JSON.stringify(obj)
+        })
+            .then((res) => res.json())
+            .then(data => {
+                setPatients([...patients, data])
+            })
+    }
+
+    useEffect(() => {
+        fetchPatients();
+    }, [])
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setShow(false);
+        postPatients(form);
     }
 
     return (
         <div>
             <div className="add-patient">
-                <Button style={{"margin-top": "100px"}} variant="outline-primary" onClick={() => setShow(true)}>Add a new patient</Button>
+                <Button style={{"marginTop": "100px"}} variant="outline-primary" onClick={() => setShow(true)}>Add a new patient</Button>
+                {patients.map(p => <PatientsList patient={p} key={p.id}/>)}
             </div>
             <Modal show={show} onHide={() => setShow(false)} animation={false}>
                 <Modal.Header closeButton> 
@@ -29,19 +68,19 @@ const Patients = () => {
                         <Row className="mb-2" style={{display: "flex", alignItems: "center", justifyContent: "center"}}>  
                             <Form.Group as={Col} md="4" controlId="validationCustom01">
                                 <Form.Label>Name</Form.Label>
-                                <Form.Control type="text" name="name" value={form.name} onChange={handleChange}/>
+                                <Form.Control type="text" name="name" value={form.name} onChange={handleChange} style={{width: "160px"}}/>
                                 {/* {this.state.nameError ? <Form.Text type= "invalid" style={{color: "red"}}>{this.state.nameError}</Form.Text>: null} */}
                             </Form.Group>
                             <Form.Group as={Col} md="4" controlId="validationCustom02">
                                 <Form.Label>Date of Birth</Form.Label>
-                                <Form.Control type="datetime" name="date_of_birth" value={form.date_of_birth} onChange={handleChange}/>
+                                <Form.Control type="date" name="date_of_birth" value={form.date_of_birth} onChange={handleChange} style={{width: "160px"}}/>
                                 {/* {this.state.roleError ? <Form.Text type= "invalid" style={{color: "red"}}>{this.state.roleError}</Form.Text>: null} */}
                             </Form.Group>
                         </Row>
                         <Row className="mb-3">
                             <Form.Group as={Col} md="4" controlId="validationCustom03">
                                 <Form.Label>Ethnicity</Form.Label>
-                                <Form.Control type="text" name="ethnicity" value={form.ethicity} onChange={handleChange}/>
+                                <Form.Control type="text" name="ethnicity" value={form.ethnicity} onChange={handleChange}/>
                             </Form.Group>
             
                             <Form.Group as={Col} md="4" controlId="validationCustom04">
@@ -80,5 +119,4 @@ const Patients = () => {
 
     )
 }
-
 export default Patients;

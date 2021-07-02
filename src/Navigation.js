@@ -17,7 +17,7 @@ const Navigation = ({user, setUser}) => {
             {user ? <Container>
                     <Navbar.Text>Welcome Back, {user.name}!</Navbar.Text>
                     <Nav.Link href="/admin/home">Home</Nav.Link>
-                    <Nav.Link href="/admin/patient">Patient</Nav.Link>
+                    <Nav.Link href="/admin/patients">Patients</Nav.Link>
                     <BoxArrowRight color="white" size="30px" onClick={handleLogout} />
                 </Container>
                 :

@@ -6,6 +6,7 @@ import AdminLogin from "./adminAuth/AdminLogin"
 import AdminSignup from "./adminAuth/AdminSignup"
 import AdminHome from "./adminHomePage/AdminHome"
 import Patients from "./adminHomePage/Patients"
+import Patient from "./adminHomePage/patientProfile/Patient"
 import { BrowserRouter as Router, Route} from "react-router-dom";
 
 
@@ -43,7 +44,8 @@ class App extends Component {
             </>
           }
           <Route exact path= "/admin/home" render={() => <AdminHome/>}/> 
-          <Route exact path= "/admin/patient" render={() => <Patients/>}/>   
+          <Route exact path= "/admin/patients" render={() => <Patients/>}/>
+          <Route path = "/admin/patient" render={() => <Patient/>}/>   
         </Router>
       </div>
     )
