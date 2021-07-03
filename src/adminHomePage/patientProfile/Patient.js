@@ -1,12 +1,17 @@
 import {Card, Table, Button, Modal, Form, Col} from 'react-bootstrap';
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import InsuranceForm from "./InsuranceForm"
+import PatientInsurance from "./PatientInsurance"
+import AppointmentForm from "./AppointmentForm"
 
 const Patient = () => {
     const [patient, setPatient] = useState(null);
     const [show, setShow] = useState(false);
+    const [insShow, setInsShow] = useState(false)
     const history = useHistory();
     const location = useLocation();
+    const [insurance, setInsurance] = useState([])
     const patientId = parseInt(location.pathname.split("/admin/patient/")[1]); 
 
     const fetchPatient = (id) => {
@@ -22,6 +27,20 @@ const Patient = () => {
             setPatient(data)})
     }
 
+    const fetchInsurance = id => {
+        fetch(`http://localhost:3000/admin/insurances`, {
+            method: "GET",
+            headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("jwt")}`,
+            },
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            let i = data.filter(i => i.patient_id !== id)
+            setInsurance(i)})
+    }
+
     const editPatient = (id, p) => {
         let obj = p ? (({name, email, address, phone_number}) => ({name, email, address, phone_number}))(p) : null
         let unedited =  p ? (({date_of_birth, race, ethnicity, language}) => ({date_of_birth, race, ethnicity, language}))(p) : null
@@ -35,9 +54,19 @@ const Patient = () => {
         })
         .then(resp => resp.json())
         .then(data => {
-            console.log(data)
             setPatient({...data, ...unedited})
         })    
+    }
+
+    const deleteInsurance= (id) => {
+        fetch(`http://localhost:3000/admin/insurances/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("jwt")}`,
+            }
+        })
+        let filterIns = insurance.filter(i => i.id !== id)
+        setInsurance(filterIns)
     }
 
     const handleChange = e => {
@@ -53,6 +82,7 @@ const Patient = () => {
 
     useEffect (() => {
         fetchPatient(patientId)
+        fetchInsurance(patientId)
     }, [patientId])
 
     return (
@@ -62,26 +92,26 @@ const Patient = () => {
                 <Card.Body>
                     <Card.Title>{patient.name}  <Button variant="outline-primary">Make an Appointment</Button></Card.Title> 
                     <Table>
-                        <tbody>
-                            <td>
-                                <Card.Text><h6>Date of Birth: </h6> {patient.date_of_birth}</Card.Text>
-                                <Card.Text><h6>Address:</h6>  {patient.address}</Card.Text>
-                                <Card.Text><h6>Phone Number:</h6>  {patient.phone_number}</Card.Text>
-                                <Card.Text><h6>Email:</h6>  {patient.email}</Card.Text>
-                                <Button variant="outline-primary" onClick={() => setShow(true)}>Edit Info</Button>
-                            </td>
-                            <td>
-                                <Card.Text><h6>Ethnicity:</h6>  {patient.ethnicity}</Card.Text>
-                                <Card.Text><h6>Race:</h6>  {patient.race}</Card.Text>
-                                <Card.Text><h6>Language:</h6>  {patient.language}</Card.Text>
-                            </td>
-                        </tbody>
+                        <td>
+                            <Card.Text><strong>Date of Birth: </strong> {patient.date_of_birth}</Card.Text>
+                            <Card.Text><b>Address:</b>  {patient.address}</Card.Text>
+                            <Card.Text><b>Phone Number:</b>  {patient.phone_number}</Card.Text>
+                            <Card.Text><b>Email:</b>  {patient.email}</Card.Text>
+                            <Button variant="outline-primary" onClick={() => setShow(true)}>Edit Info</Button>
+                        </td>
+                        <td>
+                            <Card.Text><b>Ethnicity:</b>  {patient.ethnicity}</Card.Text>
+                            <Card.Text><b>Race:</b>  {patient.race}</Card.Text>
+                            <Card.Text><b>Language:</b>  {patient.language}</Card.Text>
+                        </td>
+
                     </Table>
 
                 </Card.Body>: null
                 }
         </Card>
-        <Button variant="outline-primary">Add Insurance</Button>
+        <Button variant="outline-primary" onClick={() => setInsShow(true)}>Add Insurance</Button>
+        
 
         <Modal show={show} onHide={() => setShow(false)} animation={false}>
             {patient ?
@@ -109,6 +139,9 @@ const Patient = () => {
                 </Form>
             </Modal.Body> </> : null}
         </Modal>
+        <InsuranceForm setShow={setInsShow} show={insShow} setInsurance={setInsurance} insurance={insurance}/>
+        {insurance ? insurance.map(i => <PatientInsurance insurance={i} key={i.id} setShow={setInsShow}  insurances={insurance} setInsurance={setInsurance} deleteInsurance={deleteInsurance}/>) : null}
+        <AppointmentForm patient ={patient}/>
         </div>
     )
 }

@@ -66,7 +66,7 @@ class AdminSignup extends Component {
                     </Form.Group>
                     <Form.Group as={Col} md="4" controlId="validationCustom03">
                         <Form.Label>Title</Form.Label>
-                        <Form.Control type="text" placeholder="Enter your title" name="title" value={this.state.title} onChange={this.handleChange} className={this.state.titleError ? "error": null}/>
+                        <Form.Control type="text" placeholder="Enter your title" name="title" value={this.state.title} onChange={this.handleChange} className={this.state.titleError ? "error": null} autoComplete="off"/>
                     </Form.Group>
                 </Row>
                
