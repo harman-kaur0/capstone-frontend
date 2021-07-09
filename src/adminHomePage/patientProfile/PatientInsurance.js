@@ -1,7 +1,7 @@
-import {Card, Button, Modal, Form, Col} from 'react-bootstrap';
+import {Card, Button, Modal, Form, Col, CardGroup} from 'react-bootstrap';
 import { useState } from "react";
 
-const PatientInsurance = ({insurance, setShow, deleteInsurance, setInsurance, insurances}) => {
+const PatientInsurance = ({insurance, deleteInsurance, setInsurance, insurances}) => {
     const [delShow, setDelShow] = useState(false)
     const [updateShow, setUpdateShow] = useState(false)
     const [ins, setIns] = useState(insurance)
@@ -40,16 +40,21 @@ const PatientInsurance = ({insurance, setShow, deleteInsurance, setInsurance, in
    
     return (
         <>
+        <CardGroup>
             <Card border="light" style={{width: "60rem", marginBottom: "30px"}}>
                 <Card.Body>
                     <Card.Title>{ins.name}</Card.Title> 
                         <Card.Text><b> Subscriber Name: </b> {ins.subscriber_name}</Card.Text>
                         <Card.Text><b>Subscriber Number:</b>  {ins.subscriber_number}</Card.Text>
                         <Card.Text><b>Group Number:</b>  {ins.group_number}</Card.Text>
-                        <Button variant="outline-primary" onClick={() => setUpdateShow(true)}>UPDATE</Button>
-                        <Button variant="outline-primary" onClick={() => setDelShow(true)}>DELETE</Button>
+                        
                 </Card.Body>
+                <Card.Footer>
+                    <Button variant="primary" onClick={() => setUpdateShow(true)}>UPDATE</Button>
+                    <Button variant="danger" onClick={() => setDelShow(true)}>DELETE</Button>
+                </Card.Footer>
             </Card> 
+        </CardGroup>
 
             {/* modal to delete insurance */}
 

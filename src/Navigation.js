@@ -9,7 +9,7 @@ const Navigation = ({user, setUser}) => {
 
     const handleLogout = () => {
         localStorage.clear()
-        setUser(null)
+        setUser(false)
         history.push("/admin/login")
     }
     return (
