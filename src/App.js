@@ -7,7 +7,6 @@ import AdminSignup from "./adminAuth/AdminSignup"
 import AdminHome from "./adminHomePage/AdminHome"
 import Patients from "./adminHomePage/Patients"
 import Patient from "./adminHomePage/patientProfile/Patient"
-import Schedule from "./adminHomePage/patientProfile/Schedule"
 import { BrowserRouter as Router, Route} from "react-router-dom";
 import 'devextreme/dist/css/dx.light.css';
 
@@ -65,10 +64,9 @@ const App = () => {
               <Route exact path = "/admin/signup" render={() => <AdminSignup setUser = {setUser}/>}/> 
             </>
           }
-          <Route exact path= "/admin/home" render={() => <AdminHome/>}/> 
+          <Route exact path= "/admin/home" render={() => <AdminHome appt={appt} setAppt={setAppt}/>}/> 
           <Route exact path= "/admin/patients" render={() => <Patients/>}/>
           <Route path = "/admin/patient" render={() => <Patient user={user} newApptFormShow={newApptFormShow} setNewApptFormShow={setNewApptFormShow} appt={appt} setAppt={setAppt}/>}/> 
-          <Route path = "/admin/schedule" render={() => <Schedule newApptFormShow={newApptFormShow} setNewApptFormShow={setNewApptFormShow} appt={appt} setAppt={setAppt}/>}/> 
         </Router>
       </div>
     )

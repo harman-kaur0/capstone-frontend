@@ -1,7 +1,7 @@
 import {Card, Button, Modal, Form, Col, CardGroup, ListGroup} from 'react-bootstrap';
 import { useState } from "react";
 
-const PatientPrescriptions = ({p, deletePrescription, patient, setPatient, user}) => {
+const PatientPrescriptions = ({p, deletePrescription, prescriptions, setPrescriptions}) => {
     const [delShow, setDelShow] = useState(false)
     const [updateShow, setUpdateShow] = useState(false)
     const [pres, setPres] = useState(p)
@@ -31,8 +31,8 @@ const PatientPrescriptions = ({p, deletePrescription, patient, setPatient, user}
         })
         .then(res => res.json())
         .then(data => {
-            let pres = patient.prescriptions.map(p => p.id === data.id ? data : p)
-            setPatient({...patient, prescriptions: pres})
+            let pres = prescriptions.map(p => p.id === data.id ? data : p)
+            setPrescriptions( pres)
         })
     }
 
@@ -71,8 +71,8 @@ const PatientPrescriptions = ({p, deletePrescription, patient, setPatient, user}
                     <Card.Title>{pres.name}</Card.Title> 
                         <Card.Text><b>Quantity: </b> {pres.quantity}</Card.Text>
                         <Card.Text><b>Directions:</b> {pres.directions}</Card.Text>
-                        <Card.Text><b>Notes:</b> {pres.notes}</Card.Text>
-                        <Card.Text><b>Prescribed by :</b> </Card.Text>
+                        {pres.notes.length ? <Card.Text><b>Notes:</b> {pres.notes}</Card.Text> : null}
+                        <Card.Text><b>Prescribed by :</b>{pres.employee.name}</Card.Text>
                 </Card.Body>
                 <Card.Footer>
                     <Button onClick={() => setUpdateShow(true)}>Make changes</Button>
@@ -101,6 +101,7 @@ const PatientPrescriptions = ({p, deletePrescription, patient, setPatient, user}
                     className="mr-2" aria-label="Search"
                     name="query"
                     onChange={handleChange}
+                    autoComplete="off"
                     onBlur={() => {setTimeout(() => {setResults([])}, 100)}}
                     />
                     <ListGroup variant="flush">

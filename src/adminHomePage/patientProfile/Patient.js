@@ -17,6 +17,8 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
     const [insShow, setInsShow] = useState(false)
     const location = useLocation();
     const [insurance, setInsurance] = useState([])
+    const [ptAppt, setPtAppt] = useState([])
+    const [pres, setPres] = useState([])
     const patientId = parseInt(location.pathname.split("/admin/patient/")[1]); 
 
   
@@ -32,8 +34,12 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
         })
         .then(resp => resp.json())
         .then(data => {
+            console.log(data)
+            let apt = appt.filter(a => a.patient.id === data.id)
             setPatient(data)
             setInsurance(data.insurances)
+            setPtAppt(apt)
+            setPres(data.prescriptions)
         })
             
     }
@@ -84,8 +90,8 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
                 "Authorization": `Bearer ${localStorage.getItem("jwt")}`,
             }
         })
-        let filterPres = patient.prescriptions.filter(p => p.id !== id)
-        setPatient({...patient, prescriptions: filterPres})
+        let filterPres = pres.filter(p => p.id !== id)
+        setPres(filterPres)
     }
 
     const handleChange = e => {
@@ -110,7 +116,7 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
                 {patient ?
                 <Card.Body>
                     <Card.Title>{patient.name}  
-                    <Button variant="dark" onClick={() => history.push("/admin/schedule")}>Doctor's Schedule</Button>
+                    <Button variant="dark" onClick={() => history.push("/admin/home")}>Doctor's Schedule</Button>
                     <Button variant="dark" onClick={() => setNewApptFormShow(true)}>Schedule an appointment</Button>
                     </Card.Title> 
                     <Table>
@@ -138,7 +144,7 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
         <Modal show={show} onHide={() => setShow(false)} animation={false}>
             {patient ?
             <>
-            <Modal.Header><Modal.Title>Edit {patient.name}'s Info</Modal.Title></Modal.Header>
+            <Modal.Header closeButton><Modal.Title>Edit {patient.name}'s Info</Modal.Title></Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom01" >
@@ -165,11 +171,11 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
         {insurance ? insurance.map(i => <PatientInsurance insurance={i} key={i.id} insurances={insurance} setInsurance={setInsurance} deleteInsurance={deleteInsurance}/>) : null}
         <Card>
             <Card.Header><b>Appointments</b></Card.Header>
-            {appt ? appt.map(a => <Appointments a={a} ket={a.id} appointments= {appt} setAppointments={setAppt} deleteAppt={deleteAppt}/>) : null}
+            {ptAppt ? ptAppt.map(a => <Appointments a={a} ket={a.id} appointments= {appt} setAppointments={setAppt} deleteAppt={deleteAppt}/>) : null}
         </Card>
         <Button variant="dark" onClick={() => setPresShow(true)}>Prescribe Medication</Button>
-        <PrescriptionForm show={presShow} setShow = {setPresShow} setPatient={setPatient} user={user} patient={patient}/>
-        {patient ? patient.prescriptions.map(p => <PatientPrescriptions p={p} key={p.id} deletePrescription={deletePrescription} setPatient={setPatient} user={user} patient={patient}/>) : null}
+        <PrescriptionForm show={presShow} setShow = {setPresShow} setPres={setPres} user={user} pres={pres} patient={patient}/>
+        {pres ? pres.map(p => <PatientPrescriptions p={p} key={p.id} deletePrescription={deletePrescription} setPrescriptions={setPres} user={user} prescriptions={pres}/>) : null}
         <NewApptForm setAppt={setAppt} appt={appt} newApptFormShow={newApptFormShow} setNewApptFormShow={setNewApptFormShow}/>
     </div>
     )

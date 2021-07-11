@@ -60,7 +60,7 @@ const Appointments = ({a, deleteAppt, appointments, setAppointments}) => {
         return date.toLocaleString([], {month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'})
     }
     return (
-        <div>              
+        <div>          
             <ListGroup>
                 <ListGroup.Item><b>{appt.employee.name},  
                 Date and Time: </b>{convert(appt.startDate)}  

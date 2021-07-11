@@ -2,11 +2,13 @@ import { Button, Modal, Form, Col, ListGroup} from 'react-bootstrap';
 import { useState } from "react";
 
 
-const PrescriptionForm = ({show, setShow, setPatient, user, patient}) => {
+const PrescriptionForm = ({show, setShow, setPres, user, pres, patient}) => {
     const [query, setQuery] = useState("")
     const [results, setResults] = useState([]);
-    // const patientId = parseInt(location.pathname.split("/admin/patient/")[1]); 
     const [form, setForm] = useState({quantity: "", directions: "", notes: ""})
+    const [nameError, setNameError] = useState("")
+    const [directionsError, setDirectionsError] = useState("")
+    const [quantityError, setQuanityError] = useState("")
 
     const onResults = (e) => {
         setQuery(e);
@@ -24,14 +26,21 @@ const PrescriptionForm = ({show, setShow, setPatient, user, patient}) => {
         })
             .then((res) => res.json())
             .then(data => {
-                setPatient({...patient, prescriptions: [...patient.prescriptions, data]})
+                if (data.error){
+                    setNameError(data.error.name)
+                    setDirectionsError(data.error.directions)
+                    setQuanityError(data.error.quantity)
+                }else{
+                    setPres([...pres, data])
+                    setShow(false)
+                }
+                
             })
     }
 
     const formSubmit = (e) => {
         e.preventDefault();
         let obj = {...form, name: query, patient_id: patient.id, employee_id: user.id}
-        setShow(false)
         postPrescription(obj)
     }
 
@@ -43,7 +52,10 @@ const PrescriptionForm = ({show, setShow, setPatient, user, patient}) => {
         e.preventDefault();
         fetch(`https://rxnav.nlm.nih.gov/REST/drugs.json?name=${query}`)
             .then(resp => resp.json())
-            .then(data => { setResults(data.drugGroup.conceptGroup)})
+            .then(data => {
+                let obj = data.drugGroup.conceptGroup
+                obj ? setResults(obj[obj.length - 1].conceptProperties) : setResults(["no results found"])
+            })
     }
 
     const formChange = (e) => {
@@ -62,14 +74,13 @@ const PrescriptionForm = ({show, setShow, setPatient, user, patient}) => {
                     className="mr-2" aria-label="Search"
                     name="query"
                     onChange={handleChange}
+                    autoComplete="off"
                     onBlur={() => {setTimeout(() => {setResults([])}, 100)}}
                     />
-                    {results.length ? <ListGroup variant="flush">
-                        {results[results.length - 1].conceptProperties.map((p,idx) => <ListGroup.Item key={idx} onClick={() => onResults(p.name)}>{p.name}</ListGroup.Item>)}
-                        </ListGroup>: null}
-                    
+                    <ListGroup variant="flush">
+                        {results.map((p,idx) => p.name ? <ListGroup.Item key={idx} onClick={() => onResults(p.name)}>{p.name}</ListGroup.Item> : p)}
+                    </ListGroup>     
                 </Form.Group>
-
                 </Form>
                 {
                     query ?
@@ -77,10 +88,12 @@ const PrescriptionForm = ({show, setShow, setPatient, user, patient}) => {
                         <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom01">
                             <Form.Label>Quantity</Form.Label>
                             <Form.Control type="text" name="quantity" value={form.quantity} onChange={formChange}/>
+                            {quantityError ? <Form.Text type= "invalid" style={{color: "red"}}>{quantityError}</Form.Text>: null}
                         </Form.Group>
                         <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom01">
                             <Form.Label>Directions</Form.Label>
                             <Form.Control name="directions" value={form.directions} onChange={formChange}/>
+                            {directionsError ? <Form.Text type= "invalid" style={{color: "red"}}>{directionsError}</Form.Text>: null}
                         </Form.Group>
                         <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom01">
                             <Form.Label>Notes</Form.Label>

@@ -1,12 +1,20 @@
-import {Button, Modal, Form, Col, Row} from 'react-bootstrap';
+import {Button, Modal, Form, Col, Row, DropdownButton, Dropdown} from 'react-bootstrap';
 import {useEffect, useState} from 'react'
 import PatientsList from "./patientsPage/PatientsList"
+import { DropDownButton } from 'devextreme-react';
 
 
 const Patients = () => {
 
     const [show, setShow] = useState(false);
     const [patients, setPatients] = useState([]);
+    const [nameError, setNameError] = useState("")
+    const [dobError, setDobError] = useState("")
+    const [addressError, setAddressError] = useState("")
+    const [phoneError, setPhoneError] = useState("")
+    const [ethnicityError, setEthnicityError] = useState("")
+    const [raceError, setRaceError] = useState("")
+    const [languageError, setLanguageError] = useState("")
 
     const [form, setForm] = useState({name:"", date_of_birth:"", address:"", phone_number:"", ethicity:"", race:"", email:"", language:""})
 
@@ -39,7 +47,18 @@ const Patients = () => {
         })
             .then((res) => res.json())
             .then(data => {
-                setPatients([...patients, data])
+                if(data.error){
+                    setAddressError(data.error.address)
+                    setDobError(data.error.date_of_birth)
+                    setEthnicityError(data.error.ethicity)
+                    setLanguageError(data.error.language)
+                    setNameError(data.error.name)
+                    setPhoneError(data.error.phone_number)
+                    setRaceError(data.error.race)
+                }else{
+                    setPatients([...patients, data])
+                    setShow(false)
+                }
             })
     }
 
@@ -49,7 +68,6 @@ const Patients = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setShow(false);
         postPatients(form);
     }
 
@@ -69,42 +87,67 @@ const Patients = () => {
                             <Form.Group as={Col} md="4" controlId="validationCustom01">
                                 <Form.Label>Name</Form.Label>
                                 <Form.Control type="text" name="name" value={form.name} onChange={handleChange} style={{width: "160px"}}/>
-                                {/* {this.state.nameError ? <Form.Text type= "invalid" style={{color: "red"}}>{this.state.nameError}</Form.Text>: null} */}
+                                {nameError ? <Form.Text type= "invalid" style={{color: "red"}}>{nameError}</Form.Text>: null}
                             </Form.Group>
                             <Form.Group as={Col} md="4" controlId="validationCustom02">
                                 <Form.Label>Date of Birth</Form.Label>
-                                <Form.Control type="date" name="date_of_birth" value={form.date_of_birth} onChange={handleChange} style={{width: "160px"}}/>
-                                {/* {this.state.roleError ? <Form.Text type= "invalid" style={{color: "red"}}>{this.state.roleError}</Form.Text>: null} */}
+                                <Form.Control type="date" name="date_of_birth" value={form.date_of_birth} onChange={handleChange} style={{width: "160px"}} />
+                                {dobError ? <Form.Text type= "invalid" style={{color: "red"}}>{dobError}</Form.Text>: null}
                             </Form.Group>
                         </Row>
-                        <Row className="mb-3">
+
+                        <Row className="mb-2" style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
                             <Form.Group as={Col} md="4" controlId="validationCustom03">
                                 <Form.Label>Ethnicity</Form.Label>
-                                <Form.Control type="text" name="ethnicity" value={form.ethnicity} onChange={handleChange}/>
-                            </Form.Group>
-            
-                            <Form.Group as={Col} md="4" controlId="validationCustom04">
-                                <Form.Label>Race</Form.Label>
-                                <Form.Control type="text"  name="race" value={form.race} onChange={handleChange} />
-                                {/* {this.state.emailError ? <Form.Text type= "invalid"><ul>{this.state.emailError.map(e => <li style={{color: "red"}}>{e}</li>)}</ul></Form.Text>: null} */}
+                                <select name="ethnicity" onChange={handleChange}>
+                                    <option selected>Choose...</option>
+                                    <option value="Hispanic or Latino">Hispanic or Latino</option>
+                                    <option value="Not Hispanic or Latino">Not Hispanic or Latino</option>
+                                </select>
+                                {ethnicityError ? <Form.Text type= "invalid" style={{color: "red"}}>{ethnicityError}</Form.Text>: null}
                             </Form.Group>
 
                             <Form.Group as={Col} md="4" controlId="validationCustom05">
                                 <Form.Label>Language</Form.Label>
-                                    <Form.Control type="text" name="language" value={form.language} onChange={handleChange}/>
-                                    {/* {this.state.usernameError ? <Form.Text type= "invalid" style={{color: "red"}}>{this.state.usernameError}</Form.Text>: null} */}
+                                <select name="language" onChange={handleChange}>
+                                    <option selected>Choose...</option>
+                                    <option value="English">English</option>
+                                    <option value="Spanish">Spanish</option>
+                                    <option value="Chinese">Chinese</option>
+                                    <option value="Hindi">Hindi</option>
+                                    <option value="Vietnamese">Vietnamese</option>
+                                    <option value="Korean">Korean</option>
+                                </select>
+                                {languageError ? <Form.Text type= "invalid" style={{color: "red"}}>{languageError}</Form.Text>: null}
                             </Form.Group>
+
+
                         </Row>
+                            <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom04" style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+                                <Form.Label>Race</Form.Label>
+                                <select name="race" onChange={handleChange}>
+                                    <option >Choose...</option>
+                                    <option value="American Indian or Alaska Native">American Indian or Alaska Native</option>
+                                    <option value="Asian">Asian</option>
+                                    <option value="Black or African American">Black or African American</option>
+                                    <option value="Hispanic or Latino">Hispanic or Latino</option>
+                                    <option value="Native Hawaiian or Other Pacific Islander">Native Hawaiian or Other Pacific Islander</option>
+                                    <option value="White">White</option>
+                                </select>
+                                {raceError ? <Form.Text type= "invalid" style={{color: "red"}}>{raceError}</Form.Text>: null}
+                            </Form.Group>
 
                             <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom06">
                                 <Form.Label>Address</Form.Label>
                                 <Form.Control type="text" name="address" value={form.address} onChange={handleChange}/>
-                                {/* {this.state.passwordError ? <Form.Text type= "invalid"><ul>{this.state.passwordError.map(e => <li style={{color: "red"}}>{e}</li>)}</ul></Form.Text>: null} */}
+                                {addressError ? <Form.Text type= "invalid" style={{color: "red"}}>{addressError}</Form.Text>: null}
                             </Form.Group>
                             <Row className="mb-2" style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
                                 <Form.Group as={Col} md="4" controlId="validationCustom07">
                                     <Form.Label>Phone Number</Form.Label>
-                                    <Form.Control type="text" name="phone_number" value={form.phone_number} onChange={handleChange}/>
+                                    <Form.Control type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" name="phone_number" value={form.phone_number} onChange={handleChange}/>
+                                    <Form.Text>Format: 123-456-7890</Form.Text>
+                                    {phoneError ? <Form.Text type= "invalid" style={{color: "red"}}>{phoneError}</Form.Text>: null}
                                 </Form.Group>
                                 <Form.Group as={Col} md="4" controlId="validationCustom08">
                                     <Form.Label>Email</Form.Label>
