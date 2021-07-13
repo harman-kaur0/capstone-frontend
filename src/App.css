@@ -1,6 +1,3 @@
-.admin-login-container {
-  margin-top: 150px;
-}
 
 .error {
   border-color: red !important;
@@ -66,3 +63,107 @@
   text-align: center;
   margin-bottom: 20px;
 }
+
+.search {
+  text-align: center;
+}
+
+.search input {
+  width: 400px;
+  height: 40px;
+  margin-top: 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 127px);
+  min-height: 500px;
+}
+
+
+.topNavbar{
+  background-color: rgb(201, 201, 247);
+  padding: 3vh;
+  text-align: center;
+  height: 60px;
+}
+
+.login-img {
+  text-align: center;
+}
+
+.clinic-name {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-left {
+  /* border: 1px solid red; */
+  border-right: 1px solid black;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-form {
+  /* border: 1px solid magenta; */
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  display: flex;
+  border: 2px solid black;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  width: 800px;
+  height: 500px;
+}
+
+.admin-login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  width: 100%;
+  text-align: center;
+}
+
+.login-input {
+  width: 100%;
+  height: 30px;
+  border-style: outset;
+  border-radius: 4px;
+}
+
+.login .form-group {
+  width: 100%;
+  max-width: 100%;
+}
+
+.login-img img {
+  width: 219px;
+}
+
+.form-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.admin-login-container .form-control {
+  border-style: outset;
+}
+

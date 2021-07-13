@@ -1,13 +1,15 @@
-import {Button, Modal, Form, Col, Row, DropdownButton, Dropdown} from 'react-bootstrap';
+import {Button, Modal, Form, Col, Row} from 'react-bootstrap';
 import {useEffect, useState} from 'react'
+import {useHistory} from 'react-router-dom'
 import PatientsList from "./patientsPage/PatientsList"
-import { DropDownButton } from 'devextreme-react';
 
 
 const Patients = () => {
 
     const [show, setShow] = useState(false);
+    const history = useHistory()
     const [patients, setPatients] = useState([]);
+    const [filterPatients, setFilterPatients] = useState([])
     const [nameError, setNameError] = useState("")
     const [dobError, setDobError] = useState("")
     const [addressError, setAddressError] = useState("")
@@ -32,8 +34,15 @@ const Patients = () => {
         })
             .then((res) => res.json())
             .then(data => {
+                setFilterPatients(data)
                 setPatients(data)
             })
+    }
+
+    const search = e => {
+        let filterArr;
+        filterArr = filterPatients.filter(p => p.name.toLowerCase().includes(e.target.value) || p.date_of_birth.includes(e.target.value))
+        setPatients(filterArr)
     }
 
     const postPatients = (obj) => {
@@ -58,6 +67,7 @@ const Patients = () => {
                 }else{
                     setPatients([...patients, data])
                     setShow(false)
+                    setTimeout(() => {history.push(`admin/patient/${data.id}`)}, 3000)  
                 }
             })
     }
@@ -75,6 +85,10 @@ const Patients = () => {
         <div>
             <div className="add-patient">
                 <Button style={{"marginTop": "100px"}} variant="outline-primary" onClick={() => setShow(true)}>Add a new patient</Button>
+                <div className="search">
+                    <input onChange={search} placeholder="search for patient by name or date of birth..."/>
+                </div>
+
                 {patients.map(p => <PatientsList patient={p} key={p.id}/>)}
             </div>
             <Modal show={show} onHide={() => setShow(false)} animation={false}>

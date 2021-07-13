@@ -65,14 +65,16 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
         })
         .then(res => res.json())
         .then(data => {
-            setAppt([...appt, data])
+            console.log(data.error)
+            // setAppt([...appt, data])
+            // setFormShow(false)
         })
     }
 
     const handleChange = (e) => {
         let matches = []
         if(e.target.value.length > 0) {
-            matches = doctors.filter(d => d.name.toLowerCase().includes(e.target.value) || d.title.toLowerCase().includes(e.target.value)) 
+           matches = doctors.filter(d => d.name.toLowerCase().includes(e.target.value) || d.title.toLowerCase().includes(e.target.value))
         }
         setResults(matches)
         setQuery(e.target.value)
@@ -81,7 +83,7 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
     const patientHandleChange = (e) => {
         let matches = []
         if(e.target.value.length > 0) {
-            matches = patients.filter(d => d.name.toLowerCase().includes(e.target.value) || d.date_of_birth.includes(e.target.value)) 
+            matches =  patients.filter(d => d.name.toLowerCase().includes(e.target.value) || d.date_of_birth.includes(e.target.value))
         }
         setPtResults(matches)
         setInput(e.target.value)
@@ -98,7 +100,6 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
         let patient = patients.find(p => p.name === input)
         e.preventDefault();
         let obj = {...form, employee_id: doctor.id, startDate: startDate, endDate: endDate, patient_id: patient.id}
-        setFormShow(false)
         postAppt(obj)
      }
 
@@ -111,11 +112,11 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
                     <Form.Control type="search" value={input} 
                     placeholder="Search by name or date of birth" 
                     className="mr-2" aria-label="Search" 
-                    onChange={patientHandleChange} 
+                    onChange={patientHandleChange}
                     onBlur={() => {setTimeout(() => {setPtResults([])}, 100)}}
                     autoComplete="off"/>
                     {ptResults && ptResults.map((r, i) => 
-                        <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onPtResults(r.name, r.date_of_birth)}>{r.name}, {r.date_of_birth}</div>)}
+                       r ? <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onPtResults(r.name, r.date_of_birth)}>{r.name}, {r.date_of_birth}</div> : r)}
                 </Form.Group>
                 <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom01" >
                     <Form.Label>Find a Doctor</Form.Label>
@@ -126,7 +127,7 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
                     onBlur={() => {setTimeout(() => {setResults([])}, 100)}}
                     autoComplete="off"/>
                     {results && results.map((r, i) => 
-                        <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onResults(r.name, r.title)}>{r.name}, {r.title}</div>)}
+                       r ? <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onResults(r.name, r.title)}>{r.name}, {r.title}</div> : r)}
                 </Form.Group>
                 <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom01" >
                     <Form.Label>Choose Date and time</Form.Label><br/>

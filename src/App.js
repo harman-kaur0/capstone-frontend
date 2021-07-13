@@ -58,15 +58,18 @@ const App = () => {
       <div>
         <Router>
           <Navigation user={user} setUser = {setUser}/>
-          { user ? null :
+          { user ? 
+            <>
+              <Route exact path= "/admin/home" render={() => <AdminHome appt={appt} setAppt={setAppt}/>}/> 
+              <Route exact path= "/admin/patients" render={() => <Patients/>}/>
+              <Route path = "/admin/patient" render={() => <Patient user={user} newApptFormShow={newApptFormShow} setNewApptFormShow={setNewApptFormShow} appt={appt} setAppt={setAppt}/>}/> 
+            </>
+           :
             <>
               <Route exact path = "/admin/login" render={() => <AdminLogin setUser = {setUser}/>}/> 
               <Route exact path = "/admin/signup" render={() => <AdminSignup setUser = {setUser}/>}/> 
             </>
           }
-          <Route exact path= "/admin/home" render={() => <AdminHome appt={appt} setAppt={setAppt}/>}/> 
-          <Route exact path= "/admin/patients" render={() => <Patients/>}/>
-          <Route path = "/admin/patient" render={() => <Patient user={user} newApptFormShow={newApptFormShow} setNewApptFormShow={setNewApptFormShow} appt={appt} setAppt={setAppt}/>}/> 
         </Router>
       </div>
     )

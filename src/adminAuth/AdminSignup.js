@@ -2,6 +2,7 @@
 import {Button, Form, Col, Row} from 'react-bootstrap';
 import React, {Component} from "react"
 import {withRouter} from 'react-router-dom'
+import {BiLogInCircle} from 'react-icons/bi'
 
 class AdminSignup extends Component {
     state = {
@@ -12,10 +13,10 @@ class AdminSignup extends Component {
         title: "",
         role: "",
         email: "",
-        emailError: [],
+        emailError: "",
         nameError: "",
         usernameError: "",
-        passwordError: [],
+        passwordError: "",
         confirmPassError: "",
         roleError: ""
     }
@@ -52,52 +53,48 @@ class AdminSignup extends Component {
   };
   render(){
         return (
+            <div className="login">
+                <div className="login-container" style={{padding: "20px"}}>
             <Form className = "admin-login-container" onSubmit={this.handleSubmit}>
                  <Row className="mb-3">
                     <Form.Group as={Col} md="4" controlId="validationCustom01">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter name" name="name" value={this.state.name} onChange={this.handleChange} className={this.state.nameError ? "error": null}/>
+                        <Form.Control type="text" placeholder="enter your name..." name="name" value={this.state.name} onChange={this.handleChange} className= {this.state.nameError ? "error": null} />
                         {this.state.nameError ? <Form.Text type= "invalid" style={{color: "red"}}>{this.state.nameError}</Form.Text>: null}
                     </Form.Group>
                     <Form.Group as={Col} md="4" controlId="validationCustom02">
-                        <Form.Label>Role</Form.Label>
-                        <Form.Control type="text" placeholder="Enter your role" name="role" value={this.state.role} onChange={this.handleChange} className={this.state.roleError ? "error": null}/>
+                        <Form.Control type="text" placeholder="enter your role..." name="role" value={this.state.role} onChange={this.handleChange} className={this.state.roleError ? "error": null}/>
                         {this.state.roleError ? <Form.Text type= "invalid" style={{color: "red"}}>{this.state.roleError}</Form.Text>: null}
                     </Form.Group>
                     <Form.Group as={Col} md="4" controlId="validationCustom03">
-                        <Form.Label>Title</Form.Label>
-                        <Form.Control type="text" placeholder="Enter your title" name="title" value={this.state.title} onChange={this.handleChange} className={this.state.titleError ? "error": null} autoComplete="off"/>
+                        <Form.Control type="text" placeholder="enter your title..." name="title" value={this.state.title} onChange={this.handleChange} className={this.state.titleError ? "error": null} autoComplete="off"/>
                     </Form.Group>
                 </Row>
                
                 <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom04">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control type="text" placeholder="Enter your email address" name="email" value={this.state.email} onChange={this.handleChange} className={this.state.emailError ? "error": null}/>
+                    <Form.Control type="text" placeholder="enter your email address..." name="email" value={this.state.email} onChange={this.handleChange} className={this.state.emailError ? "error": null}/>
                     {this.state.emailError ? <Form.Text type= "invalid"><ul>{this.state.emailError.map(e => <li style={{color: "red"}}>{e}</li>)}</ul></Form.Text>: null}
                 </Form.Group>
 
                 <Row className="mb-3">
                     <Form.Group as={Col} md="4" controlId="formBasicUsername">
-                        <Form.Label>Username</Form.Label>
-                            <Form.Control type="text" placeholder="Enter username" name="username" value={this.state.username} onChange={this.handleChange} className={this.state.usernameError ? "error": null}/>
+                            <Form.Control type="text" placeholder="enter your username..." name="username" value={this.state.username} onChange={this.handleChange} className={this.state.usernameError ? "error": null}/>
                             {this.state.usernameError ? <Form.Text type= "invalid" style={{color: "red"}}>{this.state.usernameError}</Form.Text>: null}
                     </Form.Group>
 
                     <Form.Group as={Col} md="4" controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" name="password" value={this.state.password} onChange={this.handleChange} className={this.state.passwordError ? "error": null}/>
+                        <Form.Control type="password" placeholder="password..." name="password" value={this.state.password} onChange={this.handleChange} className={this.state.passwordError ? "error": null}/>
                         {this.state.passwordError ? <Form.Text type= "invalid"><ul>{this.state.passwordError.map(e => <li style={{color: "red"}}>{e}</li>)}</ul></Form.Text>: null}
                     </Form.Group>
                     <Form.Group as={Col} md="4" controlId="formBasicPassword">
-                        <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control type="password" placeholder="Confirm Password" name="confirmPass" value={this.state.confirmPass} onChange={this.handleChange} className={this.state.passwordError ? "error": null}/>
+                        <Form.Control type="password" placeholder="confirm password..." name="confirmPass" value={this.state.confirmPass} onChange={this.handleChange} className={this.state.passwordError ? "error": null}/>
                     </Form.Group>
                 </Row>
-                <Button variant="primary" type="submit">
-                    SIGN IN
+                <Button type="submit" style={{width: "30%", alignSelf: "center", marginBottom: "20px", marginTop: "20px", background: "rgb(201, 201, 247)", borderColor: "rgb(201, 201, 247)", borderRadius: "10px"}}>
+                    <BiLogInCircle/> SIGN IN
                 </Button>
-
             </Form>
+            </div>
+            </div>
 
         )
     }
