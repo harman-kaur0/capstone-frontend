@@ -1,11 +1,14 @@
-import { Modal, Button, Form, Col, ListGroup, Card} from 'react-bootstrap';
+import { Modal, Button, Form, Col, Card} from 'react-bootstrap';
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import {FaRegEdit} from "react-icons/fa"
+import {RiDeleteBinFill} from "react-icons/ri"
+import {MdSchedule} from "react-icons/md"
+import {AiFillInfoCircle} from "react-icons/ai"
 
 const Appointments = ({a, deleteAppt, appointments, setAppointments}) => {
     const [delShow, setDelShow] = useState(false)
     const [updateShow, setUpdateShow] = useState(false)
-    const location = useLocation();
     const [appt, setAppt] = useState(a)
 
     const handleDelete = () => {
@@ -60,14 +63,18 @@ const Appointments = ({a, deleteAppt, appointments, setAppointments}) => {
         return date.toLocaleString([], {month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'})
     }
     return (
-        <div>          
-            <ListGroup>
-                <ListGroup.Item><b>{appt.employee.name},  
-                Date and Time: </b>{convert(appt.startDate)}  
-                <Button onClick={() => setUpdateShow(true)}>MAKE CHANGES</Button>
-                <Button variant='danger' onClick={() => setDelShow(true)}>CANCEL</Button>
-                </ListGroup.Item>
-            </ListGroup>
+        <>    
+            <Card border="light" style={{width: "60%", marginBottom: "30px", minWidth: "250px"}}>
+                <Card.Text style={{display: "flex", alignItems: "center", padding: "2px"}}>
+                    <b>{appt.employee.name}, <MdSchedule size="25px" /> </b>{convert(appt.startDate)} 
+                    {appt.startDate >= Date.now() ? 
+                        <>
+                        <Button onClick={() => setUpdateShow(true)} variant="success" style={{marginRight: "5px", marginLeft: "auto"}}><FaRegEdit/></Button>
+                        <Button variant='danger' onClick={() => setDelShow(true)}><RiDeleteBinFill/></Button>
+                        </> 
+                    : <Button style={{marginRight: "5px", marginLeft: "auto", backgroundColor: "rgb(97, 97, 212)"}}><AiFillInfoCircle/></Button> }
+                </Card.Text>
+            </Card> 
 
             <Modal show={delShow} onHide={() => setDelShow(false)} animation={false} keyboard={false} backdrop="static">
                 <Modal.Header closeButton>
@@ -97,7 +104,7 @@ const Appointments = ({a, deleteAppt, appointments, setAppointments}) => {
                 <Button style={{marginLeft: "42.5%"}} variant="outline-success" type="Submit">Submit</Button>        
             </Form>
         </Modal>
-        </div>
+        </>
     )
 }
 

@@ -8,6 +8,11 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
     const [ptResults, setPtResults] = useState([])
     const [doctors, setDoctors] = useState([])
     const [patients, setPatients] = useState([])
+    const [empError, setEmpError] = useState("")
+    const [startError, setStartError] = useState("")
+    const [endError, setEndError] = useState("")
+    const [reasonError, setReasonError] = useState("")
+    const [ptError, setPtError] = useState("")
     
     const [form, setForm] = useState({startDate: "", reason: "", endDate: ""})
 
@@ -65,9 +70,17 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data.error)
-            // setAppt([...appt, data])
-            // setFormShow(false)
+            if(data.error){
+                setEmpError(data.error.employee)
+                setStartError(data.error.startDate)
+                setEndError(data.error.endDate)
+                setReasonError(data.error.reason)
+                setPtError(data.error.patient)
+            }else {
+                setAppt([...appt, data])
+                setFormShow(false)
+                setForm({})
+            } 
         })
     }
 
@@ -99,12 +112,24 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
         let doctor = doctors.find(d => d.name === query) 
         let patient = patients.find(p => p.name === input)
         e.preventDefault();
-        let obj = {...form, employee_id: doctor.id, startDate: startDate, endDate: endDate, patient_id: patient.id}
-        postAppt(obj)
+        let obj = {...form, startDate: startDate, endDate: endDate, employee_id: doctor.id, patient_id: patient.id} 
+        patient && doctor ? postAppt(obj) : console.log()
+     }
+
+     const hideShow = () => {
+        setFormShow(false)
+        setQuery("")
+        setInput("")
+        setForm({})
+        setEmpError("")
+        setStartError("")
+        setEndError("")
+        setReasonError("")
+        setPtError("")
      }
 
     return (
-        <Modal show={formShow} onHide={() => setFormShow(false)} animation={false}>
+        <Modal show={formShow} onHide={() => hideShow()} animation={false}>
             <Modal.Header closeButton></Modal.Header>
             <Form onSubmit={handleSubmit}>
                 <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom01" >
@@ -114,7 +139,8 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
                     className="mr-2" aria-label="Search" 
                     onChange={patientHandleChange}
                     onBlur={() => {setTimeout(() => {setPtResults([])}, 100)}}
-                    autoComplete="off"/>
+                    autoComplete="off" required/>
+                    {ptError ? <Form.Text type= "invalid" style={{color: "red"}}>{ptError}</Form.Text> : null}
                     {ptResults && ptResults.map((r, i) => 
                        r ? <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onPtResults(r.name, r.date_of_birth)}>{r.name}, {r.date_of_birth}</div> : r)}
                 </Form.Group>
@@ -125,18 +151,22 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
                     className="mr-2" aria-label="Search" 
                     onChange={handleChange} 
                     onBlur={() => {setTimeout(() => {setResults([])}, 100)}}
-                    autoComplete="off"/>
+                    autoComplete="off" required/>
+                    {empError ? <Form.Text type= "invalid" style={{color: "red"}}>{empError}</Form.Text> : null}
                     {results && results.map((r, i) => 
                        r ? <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onResults(r.name, r.title)}>{r.name}, {r.title}</div> : r)}
                 </Form.Group>
                 <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom01" >
                     <Form.Label>Choose Date and time</Form.Label><br/>
                     <b>Start Time</b><Form.Control type="datetime-local" name="startDate" value={form.startDate} onChange={formChange} />
+                    {startError ? <Form.Text type= "invalid" style={{color: "red"}}>{startError}</Form.Text>: null}
                     <b>End Time</b><Form.Control type="datetime-local" name="endDate" value={form.endDate} onChange={formChange} />
+                    {endError ? <Form.Text type= "invalid" style={{color: "red"}}>{endError}</Form.Text>: null}
                 </Form.Group>
                 <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom01" >
                     <Form.Label>Reason for appointment</Form.Label>
                     <Form.Control as="textarea" style={{height: '100px'}} name="reason" value={form.reason} onChange={formChange} />
+                    {reasonError ? <Form.Text type= "invalid" style={{color: "red"}}>{reasonError}</Form.Text>: null}
                 </Form.Group> 
                 <Button style={{marginLeft: "42.5%"}} variant="outline-success" type="Submit">Submit</Button>        
             </Form>

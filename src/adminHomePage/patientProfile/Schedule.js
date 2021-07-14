@@ -1,14 +1,10 @@
-import {Button} from 'react-bootstrap';
+import { Modal, Button, Form, Col } from 'react-bootstrap';
 import Scheduler, { Resource} from 'devextreme-react/scheduler';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {formatDate} from 'devextreme/localization';
-import AppointmentForm from './AppointmentForm'
-import {useHistory} from 'react-router-dom'
 
 
-const AdminHome = ({appt, setAppt}) => {
-    const history = useHistory();
-    const [formShow, setFormShow] = useState(false)
+const Schedule = ({appt, show, setShow}) => {
 
     const employeeData = () => {
         let arr = appt.length ? appt.map(d => JSON.stringify({text: d.employee.name, id: d.employee.id})) : []
@@ -24,6 +20,15 @@ const AdminHome = ({appt, setAppt}) => {
         return patientData.find(p => p.id === id)
     }
 
+
+    // const convert = str => {
+    //     var date = new Date(str),
+    //         mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+    //         day = ("0" + date.getDate()).slice(-2),
+    //         hrs = ("0" + date.getHours()).slice(-2),
+    //         mins = ("0" + date.getMinutes()).slice(-2)
+    //     return `${[date.getFullYear(), mnth, day].join("-")}T${hrs}:${mins}`
+    // }
 
     const Appointment = model => {
         const {appointmentData} = model.data
@@ -45,7 +50,7 @@ const AdminHome = ({appt, setAppt}) => {
         const {appointmentData} = model.data
         const patient = getPatientById(appointmentData.patientId) || {};
         return (
-            <div onClick={() => history.push(`/admin/patient/${patient.id}`)} style={{backgroundColor: "rgb(201, 201, 247)"}}>
+            <div style={{backgroundColor: "rgb(201, 201, 247)"}}>
                 <div> <b>Patient:</b> {patient.text} </div>
                 <div><b>Date of Birth: </b>{patient.dob} </div>
                 <div><b>Phone Number: </b>{patient.phone_number} </div>
@@ -59,16 +64,13 @@ const AdminHome = ({appt, setAppt}) => {
                 </div>
             </div>
         )
-
     }
-
   
     
     return (
-        <div style={{marginTop: "60px", display: "flex", flexDirection: "column", alignItems: "center"}}>
-            <Button style={{marginBottom: "10px", background: "rgb(97, 97, 212)", fontFamily: "monospace"}} onClick={() => setFormShow(true)}>Schedule an Appointment</Button>
+        <Modal show={show} onHide={() => setShow(false)} animation={false} className="modal-width"> 
+            <Modal.Header closeButton></Modal.Header>  
             <Scheduler
-                style={{maxWidth: "100%"}}
                 timeZone="America/Los_Angeles"
                 dataSource={filterData}
                 views={['day', 'week', 'month']}
@@ -78,22 +80,18 @@ const AdminHome = ({appt, setAppt}) => {
                 height={600}
                 firstDayOfWeek={0}
                 startDayHour={8}
-                endDayHour={17} 
+                endDayHour={17}
                 showAllDayPanel={false}
                 crossScrollingEnabled={true}
                 cellDuration={30}
                 editing={{allowAdding: false, allowUpdating: false }}
                 appointmentComponent={Appointment}
-                onAppointmentFormOpening={e => e.cancel = true}
                 appointmentTooltipComponent={AppointmentTooltip}
             >
-                <Resource fieldExpr="employeeId" allowMultiple={false} dataSource={employeeData()}/>
-            </Scheduler>
-            <AppointmentForm appt={appt} setAppt={setAppt} formShow={formShow} setFormShow={setFormShow}/>
-            
-        </div>
-        
+                <Resource dataSource={employeeData()} fieldExpr="employeeId" allowMultiple={false}/>
+            </Scheduler>  
+        </Modal>   
     )
 }
 
-export default AdminHome;
+export default Schedule;

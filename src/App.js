@@ -18,7 +18,6 @@ const App = () => {
   const [newApptFormShow, setNewApptFormShow] = useState(false)
   const [appt, setAppt] = useState([])
   
-
  const getUser = () => {
     if (localStorage.getItem('jwt')){
       fetch('http://localhost:3000/admin/getemployee', {

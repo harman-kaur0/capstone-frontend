@@ -32,6 +32,7 @@ const InsuranceForm = ({setShow, show, insurance, setInsurance}) => {
                 }else {
                 setInsurance([...insurance, data])
                 setShow(false)
+                setForm({})
                 }
             })
     }
@@ -44,11 +45,20 @@ const InsuranceForm = ({setShow, show, insurance, setInsurance}) => {
         e.preventDefault();
         postInsurance({...form, patient_id: patientId})
     }
+
+    const hideShow = () => {
+        setShow(false)
+        setForm({})
+        setNameError("")
+        setNumberError("")
+        setSubName("")
+        setGroupError("")
+    }
    
 
     return(
         <>
-        <Modal show={show} onHide={() => setShow(false)} animation={false}>
+        <Modal show={show} onHide={() => hideShow()} animation={false}>
             <Modal.Header closeButton><Modal.Title>Add Insurance Info</Modal.Title></Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>

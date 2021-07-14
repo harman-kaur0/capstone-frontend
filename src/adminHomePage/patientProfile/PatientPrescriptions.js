@@ -1,5 +1,7 @@
 import {Card, Button, Modal, Form, Col, CardGroup, ListGroup} from 'react-bootstrap';
 import { useState } from "react";
+import {FaRegEdit} from "react-icons/fa"
+import {RiDeleteBinFill} from "react-icons/ri"
 
 const PatientPrescriptions = ({p, deletePrescription, prescriptions, setPrescriptions}) => {
     const [delShow, setDelShow] = useState(false)
@@ -66,18 +68,18 @@ const PatientPrescriptions = ({p, deletePrescription, prescriptions, setPrescrip
     return (
         <div>
             <CardGroup>
-            <Card border="light" style={{width: "60rem", marginBottom: "30px"}}>
+            <Card border="light" style={{width: "30%", marginBottom: "30px", minWidth: "250px"}}>
                 <Card.Body>
                     <Card.Title>{pres.name}</Card.Title> 
                         <Card.Text><b>Quantity: </b> {pres.quantity}</Card.Text>
                         <Card.Text><b>Directions:</b> {pres.directions}</Card.Text>
-                        {pres.notes.length ? <Card.Text><b>Notes:</b> {pres.notes}</Card.Text> : null}
+                        <Card.Text><b>Notes:</b> {pres.notes.length ? pres.notes : "not entered"}</Card.Text> 
                         <Card.Text><b>Prescribed by :</b>{pres.employee.name}</Card.Text>
                 </Card.Body>
-                <Card.Footer>
-                    <Button onClick={() => setUpdateShow(true)}>Make changes</Button>
-                    <Button variant="danger" onClick={() => setDelShow(true)}>Delete</Button>
-                </Card.Footer>
+                <div style={{display: "flex", justifyContent: "center"}}>
+                    <Button onClick={() => setUpdateShow(true)} variant="success" style={{marginRight: "5px"}}><FaRegEdit/></Button>
+                    <Button variant="danger" onClick={() => setDelShow(true)}><RiDeleteBinFill/></Button>
+                </div>
             </Card> 
         </CardGroup>
 

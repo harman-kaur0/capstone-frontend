@@ -84,12 +84,13 @@ const Patients = () => {
     return (
         <div>
             <div className="add-patient">
-                <Button style={{"marginTop": "100px"}} variant="outline-primary" onClick={() => setShow(true)}>Add a new patient</Button>
+                <Button style={{marginTop: "60px", marginBottom: "10px", background: "rgb(97, 97, 212)", fontFamily: "monospace"}} onClick={() => setShow(true)}>Add a new patient</Button>
                 <div className="search">
                     <input onChange={search} placeholder="search for patient by name or date of birth..."/>
                 </div>
-
-                {patients.map(p => <PatientsList patient={p} key={p.id}/>)}
+                <div className="patients-container">
+                    {patients.map(p => <PatientsList patient={p} key={p.id}/>)}
+                </div>
             </div>
             <Modal show={show} onHide={() => setShow(false)} animation={false}>
                 <Modal.Header closeButton> 

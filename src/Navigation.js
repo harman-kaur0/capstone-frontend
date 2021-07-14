@@ -32,7 +32,7 @@ const Navigation = ({user, setUser}) => {
                         <RiHospitalFill color="rgb(97, 97, 212)" size= "30px"/>
                         <Navbar.Text>Welcome Back, {user.name}!</Navbar.Text>
                         <Nav.Link href="/admin/home" style={{color: "rgb(97, 97, 212)"}}><AiOutlineSchedule size="20px"/> / Home</Nav.Link>
-                        <Nav.Link href="/admin/patients" style={{color: "rgb(97, 97, 212)"}}><BsFillPeopleFill/> / Patients</Nav.Link>
+                        <Nav.Link href="/admin/patients" style={{color: "rgb(97, 97, 212)"}}><BsFillPeopleFill size="18px"/> / Patients</Nav.Link>
                         <BoxArrowRight color="white" size="30px" onClick={handleLogout} />
                         
                     </Container>

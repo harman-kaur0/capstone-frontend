@@ -42,6 +42,7 @@ const PrescriptionForm = ({show, setShow, setPres, user, pres, patient}) => {
         e.preventDefault();
         let obj = {...form, name: query, patient_id: patient.id, employee_id: user.id}
         postPrescription(obj)
+        setForm({})
     }
 
     const handleChange = (e) => {
@@ -62,9 +63,18 @@ const PrescriptionForm = ({show, setShow, setPres, user, pres, patient}) => {
         setForm({...form, [e.target.name]: e.target.value})
     }
 
+    const hideShow = () => {
+        setShow(false)
+        setNameError("")
+        setDirectionsError("")
+        setQuanityError("")
+        setForm({})
+        setQuery("")
+    }
+
     return (
         <div>
-            <Modal show={show} onHide={() => setShow(false)} animation={false}>
+            <Modal show={show} onHide={() => hideShow()} animation={false}>
                 <Modal.Header closeButton></Modal.Header>
                 <Form onSubmit={handleSubmit} style={{marginBottom: '20px', marginTop: "5px"}}>
                 <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom01" >

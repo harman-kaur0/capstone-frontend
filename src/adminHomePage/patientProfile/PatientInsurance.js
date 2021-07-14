@@ -1,5 +1,7 @@
 import {Card, Button, Modal, Form, Col, CardGroup} from 'react-bootstrap';
 import { useState } from "react";
+import {FaRegEdit} from "react-icons/fa"
+import {RiDeleteBinFill} from "react-icons/ri"
 
 const PatientInsurance = ({insurance, deleteInsurance, setInsurance, insurances}) => {
     const [delShow, setDelShow] = useState(false)
@@ -41,18 +43,17 @@ const PatientInsurance = ({insurance, deleteInsurance, setInsurance, insurances}
     return (
         <>
         <CardGroup>
-            <Card border="light" style={{width: "60rem", marginBottom: "30px"}}>
+            <Card border="light" style={{width: "30%", marginBottom: "30px", minWidth: "250px"}}>
                 <Card.Body>
                     <Card.Title>{ins.name}</Card.Title> 
                         <Card.Text><b> Subscriber Name: </b> {ins.subscriber_name}</Card.Text>
                         <Card.Text><b>Subscriber Number:</b>  {ins.subscriber_number}</Card.Text>
                         <Card.Text><b>Group Number:</b>  {ins.group_number}</Card.Text>
-                        
+                        <div style={{display: "flex", justifyContent: "center"}}>
+                            <Button variant="success" onClick={() => setUpdateShow(true)} style={{marginRight: "5px"}}><FaRegEdit/></Button>
+                            <Button variant="danger" onClick={() => setDelShow(true)}><RiDeleteBinFill/></Button> 
+                        </div>    
                 </Card.Body>
-                <Card.Footer>
-                    <Button variant="primary" onClick={() => setUpdateShow(true)}>UPDATE</Button>
-                    <Button variant="danger" onClick={() => setDelShow(true)}>DELETE</Button>
-                </Card.Footer>
             </Card> 
         </CardGroup>
 

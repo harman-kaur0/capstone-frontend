@@ -3,10 +3,6 @@
   border-color: red !important;
 }
 
-.add-patient {
-  text-align: center;
-}
-
 .new-patient-form{
   border: 1px solid saddlebrown;
   width: 100%;
@@ -167,3 +163,23 @@
   border-style: outset;
 }
 
+.dx-scheduler-appointment-content {
+  background-color: rgb(201, 201, 247);
+}
+
+.patients-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 80%;
+  justify-content: space-around;
+}
+
+.add-patient {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-width .modal-dialog {
+  max-width: 100% !important;
+}
