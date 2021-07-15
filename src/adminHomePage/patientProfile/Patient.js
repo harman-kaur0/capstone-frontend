@@ -14,6 +14,7 @@ import {BsFillPlusCircleFill, BsPersonLinesFill} from 'react-icons/bs'
 import {IoIosAddCircleOutline} from 'react-icons/io'
 import {FiUpload} from "react-icons/fi"
 import Schedule from "./Schedule"
+import LabForm from "./LabForm"
 
 
 const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => {
@@ -22,6 +23,7 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
     const [show, setShow] = useState(false);
     const [presShow, setPresShow] = useState(false)
     const [insShow, setInsShow] = useState(false)
+    const [labFormShow, setLabFormShow] = useState(false)
     const location = useLocation();
     const [insurance, setInsurance] = useState([])
     const [pres, setPres] = useState([])
@@ -152,7 +154,7 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
             <Button onClick={() => setInsShow(true)} style={{color: "black", marginBottom: "20px", fontSize: "10px", width: "135px", backgroundColor: "rgb(97, 97, 212)"}}><IoIosAddCircleOutline/> INSURANCE</Button>
             <Button onClick={() => setPresShow(true)} style={{color: "black", marginBottom: "20px", fontSize: "10px", width: "135px", backgroundColor: "rgb(97, 97, 212)"}}><IoIosAddCircleOutline/> MEDICATIONS</Button>
             <Button style={{color: "black", marginBottom: "20px", fontSize: "10px", width: "135px", backgroundColor: "rgb(97, 97, 212)"}}><IoIosAddCircleOutline/> IMMUNIZATIONS</Button>
-            <Button style={{color: "black", marginBottom: "20px", fontSize: "10px", width: "135px", backgroundColor: "rgb(97, 97, 212)"}}><FiUpload/> LAB RESULTS </Button>
+            <Button style={{color: "black", marginBottom: "20px", fontSize: "10px", width: "135px", backgroundColor: "rgb(97, 97, 212)"}} onClick={() => setLabFormShow(true)}><FiUpload/> LAB RESULTS </Button>
         </div>
         </div>
        
@@ -225,7 +227,7 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
             </Modal.Body> </> : null}
         </Modal>
         <InsuranceForm show={insShow} setShow = {setInsShow} setInsurance={setInsurance} insurance={insurance}/> 
-        {/* {insurance.length ? 
+        {insurance.length ? 
             <Card style={{display: "flex", width: "80%", justifyContent: "space-around", flexWrap: "wrap", flexDirection: "column", marginBottom: "10px"}}>
                 <Card.Body>
                     <Card.Header style={{textAlign: "center", color: "rgb(97, 97, 212)", fontSize: "20px", fontWeight: "bold", marginBottom : "10px"}}><BsFillPlusCircleFill size="22px" marginLeft="20px" cursor="pointer" onClick={() => setInsShow(true)}/> INSURANCE INFO</Card.Header>
@@ -234,7 +236,7 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
                     </div> 
                 </Card.Body>
             </Card>
-        : null} */}
+        : null}
         {filteredAppt.length ?
         <Card style={{display: "flex", width: "80%", flexWrap: "wrap", flexDirection: "column", marginTop: "30px", marginBottom: "10px"}}>
                 <Card.Header style={{textAlign: "center", color: "rgb(97, 97, 212)", fontSize: "20px", fontWeight: "bold", marginBottom : "10px"}}>
@@ -258,6 +260,7 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
         : null}
         <NewApptForm setAppt={setAppt} appt={appt} newApptFormShow={newApptFormShow} setNewApptFormShow={setNewApptFormShow}/>
         <Schedule show={scheduleShow} setShow={setScheduleShow} appt={appt}/>
+        <LabForm show={labFormShow} setShow={setLabFormShow}/>
     </div>
     )
 }
