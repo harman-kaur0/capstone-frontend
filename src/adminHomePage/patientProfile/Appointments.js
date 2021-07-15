@@ -5,6 +5,7 @@ import {FaRegEdit} from "react-icons/fa"
 import {RiDeleteBinFill} from "react-icons/ri"
 import {MdSchedule} from "react-icons/md"
 import {AiFillInfoCircle} from "react-icons/ai"
+import { DateBox } from 'devextreme-react';
 
 const Appointments = ({a, deleteAppt, appointments, setAppointments}) => {
     const [delShow, setDelShow] = useState(false)
@@ -67,12 +68,12 @@ const Appointments = ({a, deleteAppt, appointments, setAppointments}) => {
             <Card border="light" style={{width: "60%", marginBottom: "30px", minWidth: "250px"}}>
                 <Card.Text style={{display: "flex", alignItems: "center", padding: "2px"}}>
                     <b>{appt.employee.name}, <MdSchedule size="25px" /> </b>{convert(appt.startDate)} 
-                    {appt.startDate >= Date.now() ? 
+                    {new Date(appt.startDate).getTime() >= Date.now() ? 
                         <>
                         <Button onClick={() => setUpdateShow(true)} variant="success" style={{marginRight: "5px", marginLeft: "auto"}}><FaRegEdit/></Button>
                         <Button variant='danger' onClick={() => setDelShow(true)}><RiDeleteBinFill/></Button>
                         </> 
-                    : <Button style={{marginRight: "5px", marginLeft: "auto", backgroundColor: "rgb(97, 97, 212)"}}><AiFillInfoCircle/></Button> }
+                    : <Button style={{marginRight: "5px", marginLeft: "auto", backgroundColor: "rgb(97, 97, 212)"}} onClick={() => console.log(new Date(appt.startDate).getTime())}><AiFillInfoCircle/></Button> }
                 </Card.Text>
             </Card> 
 

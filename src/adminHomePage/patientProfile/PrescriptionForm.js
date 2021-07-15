@@ -6,7 +6,6 @@ const PrescriptionForm = ({show, setShow, setPres, user, pres, patient}) => {
     const [query, setQuery] = useState("")
     const [results, setResults] = useState([]);
     const [form, setForm] = useState({quantity: "", directions: "", notes: ""})
-    const [nameError, setNameError] = useState("")
     const [directionsError, setDirectionsError] = useState("")
     const [quantityError, setQuanityError] = useState("")
 
@@ -27,7 +26,6 @@ const PrescriptionForm = ({show, setShow, setPres, user, pres, patient}) => {
             .then((res) => res.json())
             .then(data => {
                 if (data.error){
-                    setNameError(data.error.name)
                     setDirectionsError(data.error.directions)
                     setQuanityError(data.error.quantity)
                 }else{
@@ -65,7 +63,6 @@ const PrescriptionForm = ({show, setShow, setPres, user, pres, patient}) => {
 
     const hideShow = () => {
         setShow(false)
-        setNameError("")
         setDirectionsError("")
         setQuanityError("")
         setForm({})

@@ -110,6 +110,8 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
         fetchPatient(patientId)
     }, [patientId])
 
+    const filteredAppt = appt.filter(a => a.patient.id === patientId)
+
     return (
         
         <div style={{marginTop: "100px", display: "flex", flexDirection: "column", alignItems: "center"}}>
@@ -223,7 +225,7 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
             </Modal.Body> </> : null}
         </Modal>
         <InsuranceForm show={insShow} setShow = {setInsShow} setInsurance={setInsurance} insurance={insurance}/> 
-        {insurance.length ? 
+        {/* {insurance.length ? 
             <Card style={{display: "flex", width: "80%", justifyContent: "space-around", flexWrap: "wrap", flexDirection: "column", marginBottom: "10px"}}>
                 <Card.Body>
                     <Card.Header style={{textAlign: "center", color: "rgb(97, 97, 212)", fontSize: "20px", fontWeight: "bold", marginBottom : "10px"}}><BsFillPlusCircleFill size="22px" marginLeft="20px" cursor="pointer" onClick={() => setInsShow(true)}/> INSURANCE INFO</Card.Header>
@@ -232,14 +234,14 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
                     </div> 
                 </Card.Body>
             </Card>
-        : null}
-        {appt.filter(a => a.patient.id === patientId).length ?
+        : null} */}
+        {filteredAppt.length ?
         <Card style={{display: "flex", width: "80%", flexWrap: "wrap", flexDirection: "column", marginTop: "30px", marginBottom: "10px"}}>
                 <Card.Header style={{textAlign: "center", color: "rgb(97, 97, 212)", fontSize: "20px", fontWeight: "bold", marginBottom : "10px"}}>
                     <BsFillPlusCircleFill size="22px" marginLeft="20px" cursor="pointer" onClick={() => setNewApptFormShow(true)}/> APPOINTMENTS
                 </Card.Header>
                 <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-                    {appt.filter(a => a.patient.id === patientId).map(a => <Appointments a={a} ket={a.id} appointments= {appt} setAppointments={setAppt} deleteAppt={deleteAppt}/>)}
+                    {filteredAppt.sort((a, b) => a.created_at < b.created_at ? 1 : -1).map(a => <Appointments a={a} ket={a.id} appointments= {appt} setAppointments={setAppt} deleteAppt={deleteAppt}/>)}
                 </div>
         </Card>
         : null}

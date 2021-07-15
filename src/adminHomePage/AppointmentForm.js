@@ -1,8 +1,10 @@
 import { Modal, Button, Form, Col } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router';
 
 const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
     const [query, setQuery] = useState("")
+    const history = useHistory()
     const [input, setInput] = useState("")
     const [results, setResults] = useState([])
     const [ptResults, setPtResults] = useState([])
@@ -142,7 +144,7 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
                     autoComplete="off" required/>
                     {ptError ? <Form.Text type= "invalid" style={{color: "red"}}>{ptError}</Form.Text> : null}
                     {ptResults && ptResults.map((r, i) => 
-                       r ? <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onPtResults(r.name, r.date_of_birth)}>{r.name}, {r.date_of_birth}</div> : r)}
+                       r ? <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onPtResults(r.name, r.date_of_birth)} style={{fontSize: "20px"}}>{r.name}, {r.date_of_birth}</div> : r)}
                 </Form.Group>
                 <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom01" >
                     <Form.Label>Find a Doctor</Form.Label>
@@ -154,10 +156,9 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
                     autoComplete="off" required/>
                     {empError ? <Form.Text type= "invalid" style={{color: "red"}}>{empError}</Form.Text> : null}
                     {results && results.map((r, i) => 
-                       r ? <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onResults(r.name, r.title)}>{r.name}, {r.title}</div> : r)}
+                       r ? <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onResults(r.name, r.title)} style={{fontSize: "20px"}}>{r.name}, {r.title}</div> : r)}
                 </Form.Group>
                 <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom01" >
-                    <Form.Label>Choose Date and time</Form.Label><br/>
                     <b>Start Time</b><Form.Control type="datetime-local" name="startDate" value={form.startDate} onChange={formChange} />
                     {startError ? <Form.Text type= "invalid" style={{color: "red"}}>{startError}</Form.Text>: null}
                     <b>End Time</b><Form.Control type="datetime-local" name="endDate" value={form.endDate} onChange={formChange} />

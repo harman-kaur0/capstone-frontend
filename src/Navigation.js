@@ -39,7 +39,7 @@ const Navigation = ({user, setUser}) => {
                     :
                     <Container>
                         <RiHospitalFill color="red" size="30px"/>
-                        <Nav.Link href="/admin/login">My Health <Navbar.Text>/ Welcome</Navbar.Text></Nav.Link>
+                        <Nav.Link href="/admin/login">My Clinic <Navbar.Text>/ Welcome</Navbar.Text></Nav.Link>
                     </Container>
                     
                 }

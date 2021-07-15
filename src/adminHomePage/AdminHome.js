@@ -18,7 +18,7 @@ const AdminHome = ({appt, setAppt}) => {
     const patientData = appt.length ? appt.map(a => ({id: a.patient.id, text: a.patient.name, dob: a.patient.date_of_birth, phone_number: a.patient.phone_number})) : []
     const data = appt.length ? appt.map(a => ({employeeId: a.employee.id, patientId: a.patient.id, reason: a.reason, startDate: new Date(a.startDate), endDate: new Date(a.endDate)})) : []
 
-    const filterData = data.filter(d => d.startDate >= Date.now())
+    const filterData = data.filter(d => new Date(d.startDate).getTime() >= Date.now())
 
     const getPatientById = id => {
         return patientData.find(p => p.id === id)

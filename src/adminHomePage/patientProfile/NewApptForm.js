@@ -106,7 +106,7 @@ const NewApptForm = ({newApptFormShow, setNewApptFormShow, setAppt, appt}) => {
                         autoComplete="off" required/>
                     {empError ? <Form.Text type= "invalid" style={{color: "red"}}>{empError}</Form.Text> : null}
                     {results && results.map((r, i) => 
-                        <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onResults(r.name, r.title)}>{r.name}, {r.title}</div>)
+                        <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onResults(r.name, r.title)} style={{fontSize: "20px"}}>{r.name}, {r.title}</div>)
                     }
                             
                     
