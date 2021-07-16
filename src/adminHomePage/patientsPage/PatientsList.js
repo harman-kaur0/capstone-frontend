@@ -18,7 +18,7 @@ const PatientsList = ({patient}) => {
                 </div>
                 </Card.Header>
             <Card.Body>
-                <Card.Text><FaLanguage size="20px"/>{patient.language ? patient.language : "not entered"}</Card.Text>
+                <Card.Text><FaLanguage size="20px"/> {patient.language ? patient.language : "not entered"}</Card.Text>
                 <Card.Text><FaRegAddressBook/> {patient.address ? patient.address : "not entered"}</Card.Text>
                 <Card.Text><ImPhone/> {patient.phone_number}</Card.Text>
             </Card.Body>

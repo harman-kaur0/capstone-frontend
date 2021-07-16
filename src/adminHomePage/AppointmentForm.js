@@ -93,6 +93,8 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
         }
         setResults(matches)
         setQuery(e.target.value)
+        console.log(query)
+        console.log(matches)
     }
 
     const patientHandleChange = (e) => {
@@ -144,7 +146,7 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
                     autoComplete="off" required/>
                     {ptError ? <Form.Text type= "invalid" style={{color: "red"}}>{ptError}</Form.Text> : null}
                     {ptResults && ptResults.map((r, i) => 
-                       r ? <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onPtResults(r.name, r.date_of_birth)} style={{fontSize: "20px"}}>{r.name}, {r.date_of_birth}</div> : r)}
+                       r ? <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onPtResults(r.name)} style={{fontSize: "20px"}}>{r.name}, {r.date_of_birth}</div> : r)}
                 </Form.Group>
                 <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom01" >
                     <Form.Label>Find a Doctor</Form.Label>
@@ -156,7 +158,7 @@ const AppointmentForm = ({formShow, setFormShow, setAppt, appt}) => {
                     autoComplete="off" required/>
                     {empError ? <Form.Text type= "invalid" style={{color: "red"}}>{empError}</Form.Text> : null}
                     {results && results.map((r, i) => 
-                       r ? <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onResults(r.name, r.title)} style={{fontSize: "20px"}}>{r.name}, {r.title}</div> : r)}
+                       r ? <div key={i} className="results col-md-12 justify-content-md-center" onClick={() => onResults(r.name)} style={{fontSize: "20px"}}>{r.name}, {r.title}</div> : r)}
                 </Form.Group>
                 <Form.Group as={Col} className="position-relative mb-3" controlId="validationCustom01" >
                     <b>Start Time</b><Form.Control type="datetime-local" name="startDate" value={form.startDate} onChange={formChange} />

@@ -66,7 +66,7 @@ const Appointments = ({a, deleteAppt, appointments, setAppointments}) => {
             <Card border="light" style={{width: "60%", marginBottom: "30px", minWidth: "250px"}}>
                 <Card.Text style={{display: "flex", alignItems: "center", padding: "2px"}}>
                     <b>{appt.employee.name}, <MdSchedule size="25px" /> </b>{convert(appt.startDate)} 
-                    {new Date(appt.startDate).getTime() >= Date.now() ? 
+                    {new Date(appt.endDate).getTime() >= Date.now() ? 
                         <>
                         <Button onClick={() => setUpdateShow(true)} variant="success" style={{marginRight: "5px", marginLeft: "auto"}}><FaRegEdit/></Button>
                         <Button variant='danger' onClick={() => setDelShow(true)}><RiDeleteBinFill/></Button>
