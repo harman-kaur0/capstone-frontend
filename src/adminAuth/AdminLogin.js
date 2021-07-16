@@ -30,7 +30,7 @@ class AdminLogin extends Component {
           }else {
             this.props.setUser(data.employee)
             localStorage.setItem('jwt', data.jwt)
-            this.props.history.push("/admin/home");
+            setTimeout(() => window.location = "http://localhost:3001/admin/home", 500)
           }
         })
     }

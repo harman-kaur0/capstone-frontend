@@ -9,6 +9,7 @@ import Patients from "./adminHomePage/Patients"
 import Patient from "./adminHomePage/patientProfile/Patient"
 import { BrowserRouter as Router, Route} from "react-router-dom";
 import 'devextreme/dist/css/dx.light.css';
+import ReactLoading from "react-loading"
 
 
 
@@ -17,6 +18,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [newApptFormShow, setNewApptFormShow] = useState(false)
   const [appt, setAppt] = useState([])
+  const [done, setDone] = useState(undefined)
   
  const getUser = () => {
     if (localStorage.getItem('jwt')){
@@ -49,7 +51,11 @@ const App = () => {
 
   useEffect(() => {
     getUser()
-    fetchAppt()
+    setTimeout(() => {
+      fetchAppt()
+      setDone(true)
+    }, 2000);
+   
   }, [])
 
 
@@ -59,7 +65,8 @@ const App = () => {
           <Navigation user={user} setUser = {setUser}/>
           { user ? 
             <>
-              <Route exact path= "/admin/home" render={() => <AdminHome appt={appt} setAppt={setAppt}/>}/> 
+            {!done ? (<div className="loading"><ReactLoading type={"bubbles"} color={"rgb(201, 201, 247)"} height={150} width={150} /></div>) :
+              <Route exact path= "/admin/home" render={() => <AdminHome appt={appt} setAppt={setAppt}/>}/> }
               <Route exact path= "/admin/patients" render={() => <Patients/>}/>
               <Route path = "/admin/patient" render={() => <Patient user={user} newApptFormShow={newApptFormShow} setNewApptFormShow={setNewApptFormShow} appt={appt} setAppt={setAppt}/>}/> 
             </>

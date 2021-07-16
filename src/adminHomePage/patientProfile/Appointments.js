@@ -1,11 +1,9 @@
 import { Modal, Button, Form, Col, Card} from 'react-bootstrap';
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
 import {FaRegEdit} from "react-icons/fa"
 import {RiDeleteBinFill} from "react-icons/ri"
 import {MdSchedule} from "react-icons/md"
 import {AiFillInfoCircle} from "react-icons/ai"
-import { DateBox } from 'devextreme-react';
 
 const Appointments = ({a, deleteAppt, appointments, setAppointments}) => {
     const [delShow, setDelShow] = useState(false)

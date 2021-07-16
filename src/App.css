@@ -183,3 +183,14 @@
 .modal-width .modal-dialog {
   max-width: 100% !important;
 }
+
+.icon-container svg {
+  cursor: pointer;
+}
+
+.loading {
+  height: calc(100vh - 127px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

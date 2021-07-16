@@ -2,11 +2,10 @@ import { Modal, Button, Form, Col } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 
-const NewApptForm = ({newApptFormShow, setNewApptFormShow, setAppt, appt}) => {
+const NewApptForm = ({newApptFormShow, setNewApptFormShow, setAppt, appt, doctors}) => {
     const [query, setQuery] = useState("")
     const location = useLocation();
     const [results, setResults] = useState([])
-    const [doctors, setDoctors] = useState([])
     const [empError, setEmpError] = useState("")
     const [startError, setStartError] = useState("")
     const [endError, setEndError] = useState("")
@@ -19,24 +18,6 @@ const NewApptForm = ({newApptFormShow, setNewApptFormShow, setAppt, appt}) => {
         setQuery(e);
         setResults([]);
     }
-
-    const fetchDoctors = () => {
-        fetch("http://localhost:3000/admin/doctors", {
-            method: "GET",
-            headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("jwt")}`,
-            },
-        })
-        .then(resp => resp.json())
-        .then(data => {
-            setDoctors(data)
-        })
-    }
-
-    useEffect(() => {
-        fetchDoctors()
-    }, [])
 
     const postAppt = obj => {
         fetch("http://localhost:3000/appointments", {
@@ -65,7 +46,7 @@ const NewApptForm = ({newApptFormShow, setNewApptFormShow, setAppt, appt}) => {
     const handleChange = (e) => {
         let matches = []
         if(e.target.value.length > 0) {
-            matches = doctors.filter(d => d.name.toLowerCase().includes(e.target.value) || d.title.toLowerCase().includes(e.target.value)) 
+            matches = doctors ? doctors.filter(d => d.name.toLowerCase().includes(e.target.value) || d.title.toLowerCase().includes(e.target.value)) : null
         }
             setResults(matches)
             setQuery(e.target.value)
@@ -78,7 +59,7 @@ const NewApptForm = ({newApptFormShow, setNewApptFormShow, setAppt, appt}) => {
     const handleSubmit = e => {
         let startDate = new Date (form.startDate)
         let endDate = new Date (form.endDate)
-        let doctor = doctors.find(d => d.name === query)
+        let doctor = doctors ? doctors.find(d => d.name === query) : null
         e.preventDefault();
         doctor ? postAppt({...form, startDate: startDate, endDate: endDate, patient_id: patientId, employee_id: doctor.id}) : console.log()
      }

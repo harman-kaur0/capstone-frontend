@@ -1,5 +1,5 @@
 import {Card, Table, Button, Modal, Form, Col, Row} from 'react-bootstrap';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useHistory, useLocation, withRouter } from "react-router-dom";
 import InsuranceForm from "./InsuranceForm"
 import PatientInsurance from "./PatientInsurance"
@@ -8,18 +8,23 @@ import PrescriptionForm from "./PrescriptionForm"
 import NewApptForm from "./NewApptForm"
 import Appointments from "./Appointments"
 import {FaUserEdit} from "react-icons/fa"
-import {AiOutlineSchedule} from 'react-icons/ai'
+import {AiFillSchedule, AiOutlineSchedule} from 'react-icons/ai'
 import {GrScheduleNew} from 'react-icons/gr'
-import {BsFillPlusCircleFill, BsPersonLinesFill} from 'react-icons/bs'
+import {BsFillPlusCircleFill, BsPersonLinesFill, BsCardList} from 'react-icons/bs'
 import {IoIosAddCircleOutline} from 'react-icons/io'
+import {CgPill} from "react-icons/cg"
+import {ImLab} from "react-icons/im"
 import {FiUpload} from "react-icons/fi"
 import Schedule from "./Schedule"
 import LabForm from "./LabForm"
+import Labs from "./Labs"
 
 
 const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => {
     const history = useHistory()
     const [patient, setPatient] = useState(null);
+    const [labResults, setLabResults] = useState([]);
+    const [doctors, setDoctors] = useState([])
     const [show, setShow] = useState(false);
     const [presShow, setPresShow] = useState(false)
     const [insShow, setInsShow] = useState(false)
@@ -30,7 +35,14 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
     const [scheduleShow, setScheduleShow] = useState(false)
     const patientId = parseInt(location.pathname.split("/admin/patient/")[1]); 
   
-    
+    const appRef = useRef()
+    const toApp = () => appRef.current.scrollIntoView({behavior: "smooth"})
+    const medRef = useRef()
+    const toMed = () => medRef.current.scrollIntoView({behavior: "smooth"})
+    const labRef = useRef()
+    const toLab = () => labRef.current.scrollIntoView({behavior: "smooth"})
+    const insRef = useRef()
+    const toIns = () => insRef.current.scrollIntoView({behavior: "smooth"})
 
     const fetchPatient = (id) => {
         fetch(`http://localhost:3000/patients/${id}`, {
@@ -42,12 +54,29 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
         })
         .then(resp => resp.json())
         .then(data => {
+            console.log(data.labs)
+            setLabResults(data.labs)
             setPatient(data)
             setInsurance(data.insurances)
             setPres(data.prescriptions)
         })
             
     }
+
+    const fetchDoctors = () => {
+        fetch("http://localhost:3000/admin/doctors", {
+            method: "GET",
+            headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("jwt")}`,
+            },
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            setDoctors(data)
+        })
+    }
+
 
     const editPatient = (id, p) => {
         fetch(`http://localhost:3000/patients/${id}`, {
@@ -110,6 +139,7 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
 
     useEffect (() => {
         fetchPatient(patientId)
+        fetchDoctors()
     }, [patientId])
 
     const filteredAppt = appt.filter(a => a.patient.id === patientId)
@@ -228,7 +258,7 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
         </Modal>
         <InsuranceForm show={insShow} setShow = {setInsShow} setInsurance={setInsurance} insurance={insurance}/> 
         {insurance.length ? 
-            <Card style={{display: "flex", width: "80%", justifyContent: "space-around", flexWrap: "wrap", flexDirection: "column", marginBottom: "10px"}}>
+            <Card ref={insRef} style={{display: "flex", width: "80%", justifyContent: "space-around", flexWrap: "wrap", flexDirection: "column", marginBottom: "10px"}}>
                 <Card.Body>
                     <Card.Header style={{textAlign: "center", color: "rgb(97, 97, 212)", fontSize: "20px", fontWeight: "bold", marginBottom : "10px"}}><BsFillPlusCircleFill size="22px" marginLeft="20px" cursor="pointer" onClick={() => setInsShow(true)}/> INSURANCE INFO</Card.Header>
                     <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-around"}}>
@@ -238,7 +268,7 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
             </Card>
         : null}
         {filteredAppt.length ?
-        <Card style={{display: "flex", width: "80%", flexWrap: "wrap", flexDirection: "column", marginTop: "30px", marginBottom: "10px"}}>
+        <Card ref={appRef} style={{ display: "flex", width: "80%", flexDirection: "column", marginTop: "30px", marginBottom: "10px", maxHeight: "450px", overflowY: "scroll"}}>
                 <Card.Header style={{textAlign: "center", color: "rgb(97, 97, 212)", fontSize: "20px", fontWeight: "bold", marginBottom : "10px"}}>
                     <BsFillPlusCircleFill size="22px" marginLeft="20px" cursor="pointer" onClick={() => setNewApptFormShow(true)}/> APPOINTMENTS
                 </Card.Header>
@@ -249,7 +279,7 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
         : null}
         <PrescriptionForm show={presShow} setShow = {setPresShow} setPres={setPres} user={user} pres={pres} patient={patient}/>
         {pres.length ? 
-        <Card style={{display: "flex", width: "80%", justifyContent: "space-around", flexWrap: "wrap", flexDirection: "column", marginTop: "30px", marginBottom: "10px"}}>
+        <Card ref={medRef} style={{display: "flex", width: "80%", justifyContent: "space-around", flexWrap: "wrap", flexDirection: "column", marginTop: "30px", marginBottom: "10px"}}>
             <Card.Header style={{textAlign: "center", color: "rgb(97, 97, 212)", fontSize: "20px", fontWeight: "bold", marginBottom : "10px"}}>
                     <BsFillPlusCircleFill size="22px" marginLeft="20px" cursor="pointer" onClick={() => setPresShow(true)}/> MEDICATIONS
             </Card.Header>
@@ -258,9 +288,26 @@ const Patient = ({user, newApptFormShow, setNewApptFormShow, appt, setAppt}) => 
             </div>
         </Card> 
         : null}
-        <NewApptForm setAppt={setAppt} appt={appt} newApptFormShow={newApptFormShow} setNewApptFormShow={setNewApptFormShow}/>
+         {labResults.length ?
+        <Card ref={labRef} style={{display: "flex", width: "80%", flexDirection: "column", marginTop: "30px", marginBottom: "10px", maxHeight: "450px", overflowY: "scroll"}}>
+                <Card.Header style={{textAlign: "center", color: "rgb(97, 97, 212)", fontSize: "20px", fontWeight: "bold", marginBottom : "10px"}}>
+                    <BsFillPlusCircleFill size="22px" marginLeft="20px" cursor="pointer" onClick={() => setLabFormShow(true)}/> LABS
+                </Card.Header>
+                <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                    {labResults.map(l => <Labs l={l} ket={l.id} />)}
+                </div>
+        </Card>
+        : null}
+         
+        <NewApptForm setAppt={setAppt} appt={appt} newApptFormShow={newApptFormShow} setNewApptFormShow={setNewApptFormShow} doctors={doctors}/>
         <Schedule show={scheduleShow} setShow={setScheduleShow} appt={appt}/>
-        <LabForm show={labFormShow} setShow={setLabFormShow}/>
+        <LabForm show={labFormShow} setShow={setLabFormShow} patient={patient} labResults={labResults} setLabResults={setLabResults} doctors={doctors}/>
+        <div className="icon-container" style={{position: "fixed", left: "10px", top: "45%", display: "flex", flexDirection: "column", height: "200px", justifyContent: "space-between"}}>
+           {filteredAppt.length ? <BsCardList size={30} onClick={toIns}/> : null}
+            {insurance.length ? <AiFillSchedule size={30} onClick={toApp}/> : null}
+            {pres.length ? <CgPill size={30} onClick={toMed}/> : null}
+            {labResults.length ? <ImLab size={30} onClick={toLab}/> : null}
+        </div>
     </div>
     )
 }
