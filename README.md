@@ -1,4 +1,4 @@
-# My Clinic
+# My Clinic | <a href="https://www.loom.com/share/9a89d0d56b7647ce845f350fe8cdc1a1?sharedAppSource=personal_library">Demo</a>
 <div align="center">An application that will let patients and doctors stay connected and improve communication.</div>
 
 ## Technologies
